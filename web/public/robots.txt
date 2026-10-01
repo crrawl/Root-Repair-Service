@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin.php
+Disallow: /diagnostika
+Disallow: /storage/
+Disallow: /backup/
+Disallow: /chat

@@ -1,0 +1,7 @@
+*
+!Dockerfile
+!Dockerfile.ssh
+!docker/
+!docker/**
+!ssh/
+!ssh/**

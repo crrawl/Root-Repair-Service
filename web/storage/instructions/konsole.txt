@@ -1,0 +1,9 @@
+ROOTREPAIR — KONSOLES SAGATAVOŠANA REMONTAM
+
+1. Ja iespējams, saglabā spēļu datu rezerves kopiju.
+2. Izņem spēles disku.
+3. Izslēdz konsoli un atvieno kabeļus.
+4. Pieraksti kļūdu paziņojumus un problēmas simptomus.
+5. Ja problēma saistīta ar barošanu, paņem barošanas kabeli.
+
+RootRepair | juris.kalnins@rootrepair.lv

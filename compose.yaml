@@ -1,0 +1,73 @@
+name: rootrepair
+services:
+  web:
+    build: .
+    ports:
+      - "${APP_PORT:-80}:80"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_NAME: rootrepair
+      DB_USER: rootrepair
+      DB_PASSWORD: ${DB_PASSWORD:-rootrepair_lab}
+    volumes:
+      - ./web:/var/www/html:ro
+      - uploads:/var/www/html/storage/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test:
+        ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/health') === 'ok' ? 0 : 1);"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - lab
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: rootrepair
+      MYSQL_USER: rootrepair
+      MYSQL_PASSWORD: ${DB_PASSWORD:-rootrepair_lab}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootrepair_root_lab}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_PASSWORD mysql --protocol=TCP -h 127.0.0.1 -u$$MYSQL_USER -D $$MYSQL_DATABASE -e 'SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    networks:
+      - lab
+
+  ssh:
+    build:
+      context: .
+      dockerfile: Dockerfile.ssh
+    volumes:
+      - ./web/public/backup/.env.bak:/run/rootrepair/.env.bak:ro
+    ports:
+      - "${SSH_PORT:-2222}:22"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "22"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - lab
+
+networks:
+  lab:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  uploads:
+
+

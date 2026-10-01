@@ -1,0 +1,13 @@
+FROM alpine:3.21
+RUN apk add --no-cache openssh && \
+    adduser -D -s /bin/ash juris && \
+    mkdir -p /run/sshd && \
+    ssh-keygen -A && \
+    printf '%s\n' 'Port 22' 'PermitRootLogin no' 'PasswordAuthentication yes' 'KbdInteractiveAuthentication no' 'AllowUsers juris' 'Subsystem sftp /usr/lib/ssh/sftp-server' > /etc/ssh/sshd_config
+COPY ssh/entrypoint.sh /usr/local/bin/rootrepair-ssh-entrypoint
+COPY ssh/user.txt /home/juris/user.txt
+RUN chmod 0755 /usr/local/bin/rootrepair-ssh-entrypoint && \
+    chmod 0644 /home/juris/user.txt && \
+    chown -R juris:juris /home/juris
+EXPOSE 22
+ENTRYPOINT ["/usr/local/bin/rootrepair-ssh-entrypoint"]
