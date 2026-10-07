@@ -16,14 +16,14 @@ docker compose up -d --build --wait
 # Linux
 
 ```bash
-git clone https://github.com/crrawl/rootrepair.lv.git
+git clone https://github.com/crrawl/Root-Repair-Service.git
 sudo apt update
 sudo apt install docker.io
 sudo apt install docker-compose
-cd rootrepair.lv
-docker compose up --build
+cd Root-Repair-Service
+sudo docker compose up --build
 
-docker compose down # izslēgt
+sudo docker compose down # izslēgt
 ```
 Pēc palaišanas:
 
